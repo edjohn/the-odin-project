@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+    </head>
+
+    <body>
+        <div class="button-container">
+            <button id="rock">Rock</button>
+            <button id="paper">Paper</button>
+            <button id="scissors">Scissors</button>
+        </div>
+
+        <div class="results-container">
+
+        </div>
+    </body>
+
+
+
+    <script>
+        
+        let playerInput = '';
+        let computerInput = '';
+        let playerScore = 0;
+        let computerScore = 0;
+
+        const buttons = document.querySelectorAll('button');
+        const resultsContainer = document.querySelector('.results-container');
+        const resultsContent = document.createElement('p');
+        const playerScoreContent = document.createElement('p');
+        const computerScoreContent = document.createElement('p');
+
+        resultsContainer.appendChild(resultsContent);
+        resultsContainer.appendChild(playerScoreContent);
+        resultsContainer.appendChild(computerScoreContent);
+        resultsContainer.appendChild(resultsContent);
+
+        buttons.forEach((button) => 
+        {
+            button.addEventListener('click', (e) => 
+            {
+                playerInput = button.id;
+                computerInput = computerPlay();
+                displayResults(playRound());
+            });
+        });
+
+        function computerPlay()
+        {
+            let randomValue = Math.floor(Math.random() * 3);
+
+            switch(randomValue)
+            {
+                case 0:
+                    return 'rock';
+                case 1:
+                    return 'paper';
+                case 2:
+                    return 'scissors';
+                default:
+                    console.log('Invalid random value!');
+                    return '';
+            }
+        }
+
+        function capitalize(word)
+        {
+            return word.charAt(0).toUpperCase() + word.substring(1).toLowerCase();
+        }
+
+        function getRoundResult(result)
+        {
+
+            let playerSelection = capitalize(playerInput);
+            let computerSelection = capitalize(computerInput);
+
+            switch(result)
+                {
+                    case 'win':
+                        playerScore += 1;
+                        return `You Won! ${playerSelection} beats ${computerSelection}!`;
+                    case 'lose':
+                        computerScore += 1;
+                        return `You Lose! ${computerSelection} beats ${playerSelection}!`;
+                    case 'tie':
+                        return 'You tied! Neither player wins the round.';
+                    default:
+                        console.log(`Invalid round result ${result}`);
+                        return '';
+                }
+        }
+
+        function playRound()
+        {
+            let playerSelection = playerInput;
+            let computerSelection = computerInput;
+
+            switch(playerSelection)
+            {
+                case 'rock':
+                    switch(computerSelection)
+                    {
+                        case 'rock':
+                            return getRoundResult('tie');
+                        case 'paper':
+                            return getRoundResult('lose');
+                        case 'scissors':
+                            return getRoundResult('win');
+                    }
+                case 'paper':
+                    switch(computerSelection)
+                    {
+                        case 'rock':
+                             return getRoundResult('win');
+                        case 'paper':
+                            return getRoundResult('tie');
+                        case 'scissors':
+                            return getRoundResult('lose');
+                    }
+                case 'scissors':
+                    switch(computerSelection)
+                    {
+                        case 'rock':
+                            return getRoundResult('lose');
+                        case 'paper':
+                            return getRoundResult('win');
+                        case 'scissors':
+                            return getRoundResult('tie');
+                    }
+                default:
+                    return getRoundResult('');
+            }
+        }
+
+        function verifyInput(input)
+        {
+            input = input.toLowerCase();
+
+            if (input == 'rock' || input == 'paper' || input == 'scissors')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        function displayResults(roundResult)
+        {
+            if (playerScore == 5)
+            {
+                playerScoreContent.textContent = '';
+                computerScoreContent.textContent = '';
+                playerScore = 0;
+                computerScore = 0;
+                resultsContent.textContent = "You won! Scores will be reset."
+            }
+            
+            else if (computerScore == 5)
+            {
+                playerScoreContent.textContent = '';
+                computerScoreContent.textContent = '';
+                playerScore = 0;
+                computerScore = 0;
+                resultsContent.textContent = "You lost! Scores will be reset."
+            }
+
+            else
+            {
+                resultsContent.textContent = roundResult;
+                playerScoreContent.textContent = `Player Score: ${playerScore}`;
+                computerScoreContent.textContent = `Computer Score: ${computerScore}`;
+            }
+        }
+
+    </script>
+
+</html>
